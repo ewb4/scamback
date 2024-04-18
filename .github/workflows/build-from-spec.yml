@@ -28,7 +28,6 @@ jobs:
           pwd
           ls -lR
 
-    steps:
       # Change @main to a specific commit SHA or version tag, e.g.:
       # actions/hello-world-docker-action@e76147da8e5c81eaf017dede5645551d4b94427b
       # actions/hello-world-docker-action@v1.2.3
