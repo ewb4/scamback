@@ -2,8 +2,8 @@ name: Build RPM from spec file
 
 on:
   push:
-# Allows you to run this workflow manually from the Actions tab
-workflow_dispatch:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 permissions:
   contents: read
