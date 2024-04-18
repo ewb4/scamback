@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN"> 
+<HTML> 
+<HEAD> 
+<TITLE>sendmail 8.10.0: Milter Configuration</TITLE> 
+<LINK REV="made" HREF="mailto:gshapiro@sendmail.org"> 
+</HEAD> 
+<BODY BGCOLOR="white"> 
+
+<H1>Milter Configuration</H1>
+
+<FONT SIZE="+2">
+<UL>
+<LI>m4 configuration
+<PRE>
+INPUT_MAIL_FILTER(`foo', `S=unix:/var/run/foo.sock, F=R')
+INPUT_MAIL_FILTER(`bar', `S=inet6:999@localhost, F=T, T=S:1s;R:1s;E:5m')
+</PRE>
+equivalent to:
+<PRE>
+define(`confINPUT_MAIL_FILTERS', `foo, bar')
+MAIL_FILTER(`foo', `S=unix:/var/run/foo.sock, F=R')
+MAIL_FILTER(`bar', `S=inet6:999@localhost, F=T, T=S:1s;R:1s;E:5m')
+</PRE>
+<LI>cf configuration
+<PRE>
+O InputMailFilters=foo, bar
+Xfoo, S=unix:/var/run/f1.sock, F=R
+Xbar, S=inet6:999@localhost, F=T, T=S:1s;R:1s;E:5m
+</PRE>
+<LI>Analysis
+<UL>
+<LI><CODE>InputMailFilters</CODE> (<CODE>confINPUT_MAIL_FILTERS</CODE>)
+determines the order filters will be called.
+<P>
+<LI>Filter name
+<UL>
+<LI>A unique label
+</UL>
+<P>
+<LI>Connection method (<CODE>S=<EM>protocol:location</EM></CODE>)
+<UL>
+<LI><EM>protocol</EM> is one of inet, inet6, unix, or local (same as unix)
+<LI><EM>location</EM> is port@host for inet and inet6 and a path name for
+unix and local
+</UL>
+<P>
+<LI>Flags (<CODE>F=</CODE>)
+<UL>
+<LI>If no flags specified and filter not available, run as if filter
+wasn't configured
+</UL>
+<TABLE>
+<TR>
+<TH ALIGN=LEFT>Flag</TH>	<TH ALIGN=LEFT>Description</TH>
+</TR>
+<TR>
+<TD>R</TD>	<TD>Reject connection if filter unavailable
+</TR>
+<TR>
+<TD>T</TD>	<TD>Temporary fail connection if filter unavailable
+</TR>
+</TABLE>
+<P>
+<LI>Timeouts (<CODE>T=</CODE>)
+<UL>
+<LI>Individual timeouts separated by semicolons
+<LI>Only need to specify those that are different than default
+</UL>
+<TABLE>
+<TR>
+<TH ALIGN=LEFT>Letter</TH>
+<TH ALIGN=LEFT>Meaning</TH>
+<TH ALIGN=LEFT>Default</TH>
+</TR>
+<TR>
+<TD>S</TD>
+<TD>Timeout for sending information from the MTA to a filter</TD>
+<TD>10s</TD>
+</TR>
+<TR>
+<TD>R</TD>
+<TD>Timeout for reading reply from the filter</TD>
+<TD>10s</TD>
+</TR>
+<TR>
+<TD>E</TD>
+<TD>Overall timeout between sending end-of-message to filter and waiting
+for the final acknowledgment</TD>
+<TD>5m</TD>
+</TR>
+</TABLE>
+</UL>
+<P>
+<LI>Can watch/debug Milter interaction using <CODE>sendmail -bs -d64.5</CODE>
+</UL>
+</FONT>
+
+<HR>
+
+<A HREF="rulesets.html">Next</A><BR>
+<A HREF="milter.html">Prev</A>
+
+<!-- Gleaned from http://www.sendmail.org/~gshapiro/8.10.Training/milterconfig.html -->
+</BODY> 
+</HTML> 

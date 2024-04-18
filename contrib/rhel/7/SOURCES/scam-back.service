@@ -1,0 +1,17 @@
+[Unit]
+Description=BackScatter prevention (scam-back) Milter
+After=syslog.target network.target
+Before=postfix.service sendmail.service
+Documentation=http://www.elandsys.com/scam/scam-backscatter/
+
+[Service]
+Type=forking
+Restart=on-failure
+PIDFile=/run/scam-back/scam-back.pid
+EnvironmentFile=-/etc/sysconfig/scam-back
+ExecStart=/usr/libexec/scam-back-wrapper start
+User=scamback
+Group=smmsp
+
+[Install]
+WantedBy=multi-user.target

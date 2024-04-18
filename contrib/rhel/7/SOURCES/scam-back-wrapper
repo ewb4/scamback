@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# Make sure required variables are set
+SOCKET=${SOCKET:="unix:/run/scam-back/scam-back.sock"}
+
+#  usage: scam-back -p protocol:address [-u user] [-g group] [-T timeout]
+#                                       [-f config] [-P pidfile] [-b path]
+#                                       [-D] [-d]
+#          -D run as a daemon
+#          -d enable libmilter smfi_setdbg if passed argument numerically equal to MI_FAILURE
+#          -u run as specified user
+#          -f use specified configuration file
+#          -P use specified pid file
+#          -b read and save recipient addresses to file
+#
+## from reading the source code, it would appear "local" and "unix" are the only 
+## valid protocol settings
+
+## from reading the source code, the debug capability appears to need an argument
+## leaving the test in the start for now
+
+## no '-R' option from reading the source code
+
+if [ "$1" = "start" ]; then
+  # Tricky stuff below... "echo -E" won't work, hence the two-step.
+  # Also, unlike mimedefang, "exec" does not "do what is needed" here.
+  /usr/bin/scam-back \
+    $([ -n "$SOCKET" ] && echo "-p $SOCKET") \
+    $([ -n "$SCAMBACK_USER" ] && echo "-u $SCAMBACK_USER") \
+    $([ -n "$SCAMBACK_GROUP" ] && echo "-g $SCAMBACK_GROUP") \
+    $([ -n "$TIMEOUT" ] && echo "-T $TIMEOUT") \
+    $([ -n "$SCAMCONF" ] && echo "-f $SCAMCONF") \
+    $([ -n "$PIDFile" ] && echo "-P $PIDFile") \
+    $([ -n "$BACKCACHEFILE" ] && echo "-b $BACKCACHEFILE") \
+    $([ "$SCAMDEBUG" = "yes" ] && echo "-d") \
+    $([ "$SCAMDAEMON" = "yes" ] && echo "-D")
+fi

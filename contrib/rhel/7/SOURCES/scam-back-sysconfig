@@ -1,0 +1,47 @@
+
+# The tmpfiles directory
+TMPFILESDIR="/run/scam-back"
+
+# The spool directory
+SPOOLDIR="/var/spool/scamback"
+
+## Variable references inside of other variable definitions are
+## not or not always expanded when this file is the EnvironmentFile
+## in SystemD.
+# The socket used by scam-back to communicate with sendmail
+#SOCKET="$TMPFILESDIR/scam-back.sock"
+SOCKET="/run/scam-back/scam-back.sock"
+
+# Run scam-back as this user, not root.  RECOMMENDED
+SCAMBACK_USER="scamback"
+
+# Run scam-back in this group, not root.  RECOMMENDED
+SCAMBACK_GROUP="smmsp"
+
+# place scam-back PIDFile
+PIDFile="/run/scam-back/scam-back.pid"
+
+# scam-back config file
+SCAMCONF="/etc/mail/scam.conf"
+
+# cache read and save recipient addresses to file
+#BACKCACHEFILE="$SPOOLDIR/backscatter.cache"
+BACKCACHEFILE="/var/spool/scamback/backscatter.cache"
+
+#scam-back version 1.5.1-pre2
+#  Features:
+#           USEMAILERTABLE
+#  usage: scam-back -p protocol:address [-u user] [-g group] [-T timeout]
+#                                       [-f config] [-P pidfile] [-b path]
+#                                       [-D]
+#          -D run as a daemon
+#          -d enable libmilter smfi_setdbg if passed argument numerically equal to MI_FAILURE
+#          -u run as specified user
+#          -f use specified configuration file
+#          -P use specified pid file
+#          -b read and save recipient addresses to file
+#
+#
+
+# Run as a daemon
+SCAMDAEMON="yes"
