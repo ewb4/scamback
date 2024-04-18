@@ -16,14 +16,40 @@ permissions:
   contents: read
 
 jobs:
+  setup:
+    name: Setup
+    runs-on: ubuntu-latest
+    outputs:
+      spec_file: ${{ steps.validate.outputs.spec_file }} 
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+      - name: Validate
+        id: validate
+        run: |
+          echo "# Environment"
+          env | sort
+          echo
+          echo "# working directory (pwd)"
+          pwd
+          echo
+          echo "# listing all files"
+          ls -lR
+          echo
+          echo "spec_file=$RANDOM" >> $GITHUB_OUTPUT
+
   build:
     name: Build RPM
+    needs: setup
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
+      - name: Check inputs
+
       - name: List
         run: |
           pwd
@@ -38,4 +64,4 @@ jobs:
         with:
           spec_file: ${{ inputs.spec_file }}
           additional_repos: ${{ inputs.additional_repos }}
-          input_who_to_greet: ${{ inputs.who-to-greet }}
+          who-to-greet: ${{ inputs.who-to-greet }}
