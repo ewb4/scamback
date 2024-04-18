@@ -4,6 +4,12 @@ on:
   push:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      spec_file:
+        description: "Path to the .spec file"
+        required: true
+        default: 'contrib/rhel/7/SPECS/*.spec'
+        type: string
 
 permissions:
   contents: read
@@ -21,3 +27,13 @@ jobs:
         run: |
           pwd
           ls -lR
+
+    steps:
+      # Change @main to a specific commit SHA or version tag, e.g.:
+      # actions/hello-world-docker-action@e76147da8e5c81eaf017dede5645551d4b94427b
+      # actions/hello-world-docker-action@v1.2.3
+      - name: Build RPM in Docker Action
+        id: build-rhel-8
+        uses: EWBr0wn/hello-world-docker-action@rockylinux-dev
+        with:
+            spec_file: ${{ inputs.spec_file }}
