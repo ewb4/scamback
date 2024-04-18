@@ -35,4 +35,6 @@ jobs:
         id: build-rhel-8
         uses: EWBr0wn/hello-world-docker-action@rockylinux-dev
         with:
-            spec_file: ${{ inputs.spec_file }}
+          spec_file: ${{ inputs.spec_file }}
+          additional_repos: ${{ inputs.additional_repos }}
+          input_who_to_greet: ${{ inputs.who-to-greet }}
