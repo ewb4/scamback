@@ -11,6 +11,13 @@ on:
         required: true
         default: 'contrib/rhel/7/SPECS/*.spec'
         type: string
+      additional_repos:
+        description: "List of additional repos"
+      who-to-greet:
+        description: "Name to greet"
+        required: true
+        default: "Josa"
+        type: string
 
 permissions:
   contents: read
@@ -45,11 +52,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
-      - name: Check inputs
-
       - name: List
         run: |
           pwd
