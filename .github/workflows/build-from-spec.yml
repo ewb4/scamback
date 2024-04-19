@@ -23,11 +23,9 @@ permissions:
   contents: read
 
 jobs:
-  setup:
-    name: Setup
-    runs-on: ubuntu-latest
-    outputs:
-      spec_file: ${{ steps.validate.outputs.spec_file }} 
+  build:
+    name: Build RPM
+    runs-on: ubuntu-latest 
     steps:
       - name: Checkout
         id: checkout
@@ -45,15 +43,17 @@ jobs:
           ls -lR
           echo
           echo "spec_file=$RANDOM" >> $GITHUB_OUTPUT
-
-  build:
-    name: Build RPM
-    needs: setup
-    runs-on: ubuntu-latest
-
-    steps:
+      - name: set variable
+        run: |
+          if [ -z "${SPEC_FILE}" ] ; then
+            SPEC_FILE=$(find . -name "*.spec" | head -1 | sed 's#./##')
+          fi
       - name: List
         run: |
+          echo "# Environment"
+          env | sort
+          echo
+          echo "# working directory (pwd)"
           pwd
           ls -lR
 
