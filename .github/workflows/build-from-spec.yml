@@ -39,7 +39,7 @@ jobs:
           echo "# Environment finding spec"
           env | grep -i spec
           if [ -z "${SPEC_FILE}" ] ; then
-            if [[ -n ${{ inputs.spec_file }} ]]; then
+            if [[ -n "${{ inputs.spec_file }}"" ]]; then
               echo "spec_file=${{ inputs.spec_file }}" >> $GITHUB_OUTPUT
             else
               SPEC_FILE=$(find . -name "*.spec" | head -1 | sed 's#./##')
