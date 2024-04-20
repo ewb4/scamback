@@ -55,7 +55,7 @@ jobs:
           echo "# Environment"
           env | sort
           echo 
-          echo "Deploying build ${{ stpes.set_step.outputs.spec_file }}"
+          echo "Deploying build ${{ steps.set_step.outputs.spec_file }}"
           echo
           echo "# working directory (pwd)"
           pwd
