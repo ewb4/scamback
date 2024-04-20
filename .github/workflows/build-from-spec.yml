@@ -72,6 +72,10 @@ jobs:
           echo "# listing all files"
           ls -lR
           echo
+          type yq
+          yum search yq
+          type jq
+          yum search jq
 
       # Change @main to a specific commit SHA or version tag, e.g.:
       # actions/hello-world-docker-action@e76147da8e5c81eaf017dede5645551d4b94427b
@@ -80,6 +84,6 @@ jobs:
         id: build-rhel-8
         uses: EWBr0wn/hello-world-docker-action@rockylinux-dev
         with:
-          spec_file: ${{ inputs.spec_file }}
+          spec_file: ${{ steps.set_step.outputs.spec_file }}
           additional_repos: ${{ inputs.additional_repos }}
           who-to-greet: ${{ inputs.who-to-greet }}
