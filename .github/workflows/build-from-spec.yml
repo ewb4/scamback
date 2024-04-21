@@ -50,6 +50,14 @@ jobs:
           env | grep -i spec
           type rsync
           find . -name "*.spec"
+      - name: set additional repo
+        id: set_repo
+        run: |
+          if [ -z "${{ inputs.additional_repos }}" ] ; then
+            echo "additional_repos=\"['powertools']\"" >> $GITHUB_OUTPUT
+          else
+            echo "additional_repos=\"${{ inputs.additional_repos }}\"" >> $GITHUB_OUTPUT
+          fi
       - name: List
         run: |
           echo "# Environment"
@@ -81,5 +89,5 @@ jobs:
         uses: EWBr0wn/hello-world-docker-action@rockylinux-dev
         with:
           spec_file: ${{ steps.set_step.outputs.spec_file }}
-          additional_repos: ${{ inputs.additional_repos }}
+          additional_repos: ${{ steps.set_repo.outputs.additional_repos }}
           who-to-greet: ${{ inputs.who-to-greet }}
