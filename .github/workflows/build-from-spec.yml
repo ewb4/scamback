@@ -54,6 +54,9 @@ jobs:
         id: set_repo
         run: |
           if [ -z "${{ inputs.additional_repos }}" ] ; then
+            # parse with https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
+            # build with the following:
+                ## $ printf "%s\n%s\n" "powertools" "powerpoles" | jq -R -s -c 'split("\n") | map(select(length>0))'
             echo 'additional_repos=["powertools"]' >> $GITHUB_OUTPUT
           else
             echo "additional_repos=${{ inputs.additional_repos }}" >> $GITHUB_OUTPUT
