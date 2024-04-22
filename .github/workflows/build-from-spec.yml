@@ -79,7 +79,7 @@ jobs:
           echo
           echo "# listing all files"
           ls -lR
-          echo
+          echo ""
 
       # Change @main to a specific commit SHA or version tag, e.g.:
       # actions/hello-world-docker-action@e76147da8e5c81eaf017dede5645551d4b94427b
