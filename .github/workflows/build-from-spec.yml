@@ -98,9 +98,9 @@ jobs:
       - name: Echo
         run: |
           echo "Content-type: ${{ steps.build-rhel-8.outputs.rpm_content_type }}"
-          echo "RPM(s): ${{ steps.build-rhel-8.outputs.built_rpm_array }}"
-          echo "SRPM: ${{ steps.build-rhel-8.outputs.built_srpm_array }}"
-          for r in $(echo '${{ steps.build-rhel-8.outputs.built_rpm_array }}'' | jq -r .[]) ; do
+          echo "RPM(s): '${{ steps.build-rhel-8.outputs.built_rpm_array }}'"
+          echo "SRPM: '${{ steps.build-rhel-8.outputs.built_srpm_array }}'"
+          for r in $(echo '${{ steps.build-rhel-8.outputs.built_rpm_array }}' | jq -r .[]) ; do
             ls -l ${r}
           done
           for s in $(echo '${{ steps.build-rhel-8.outputs.built_srpm_array }}' | jq -r .[]) ; do
