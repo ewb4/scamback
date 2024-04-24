@@ -13,6 +13,7 @@ on:
         type: string
       additional_repos:
         description: "List of additional repos"
+        type: string
       who-to-greet:
         description: "Name to greet"
         required: true
