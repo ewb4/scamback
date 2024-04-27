@@ -103,7 +103,8 @@ jobs:
           for s in $(echo '${{ steps.build-rhel-8.outputs.built_srpm_array }}' | jq -r .[]) ; do
             ls -l ${s}
           done
-          #echo ${{ fromJSON(steps.build-rhel-8.outputs.built_rpm_array) }}
+          echo ${{ fromJSON(join(steps.build-rhel-8.outputs.built_rpm_array, '
+          ') }}
 
       - name: Release
         if: true
@@ -112,5 +113,5 @@ jobs:
           name: draft release
           draft: true
           files: |-
-            ${{ join(steps.build-rhel-8.outputs.built_rpm_array, '
-            ') }}
+            ${{ fromJSON( join(steps.build-rhel-8.outputs.built_rpm_array, '
+            ') )}}
