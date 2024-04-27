@@ -109,4 +109,4 @@ jobs:
         with:
           name: draft release
           draft: true
-          files: ${{ steps.build-rhel-8.outputs.built_rpm_array }}
+          files: ${{ fromJSON(steps.build-rhel-8.outputs.built_rpm_array) }}
