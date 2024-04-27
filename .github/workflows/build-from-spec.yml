@@ -103,8 +103,10 @@ jobs:
           for s in $(echo '${{ steps.build-rhel-8.outputs.built_srpm_array }}' | jq -r .[]) ; do
             ls -l ${s}
           done
+          echo ${{ fromJSON(steps.build-rhel-8.outputs.built_rpm_array) }}
 
       - name: Release
+        if: false
         uses: softprops/action-gh-release@v2
         with:
           name: draft release
