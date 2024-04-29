@@ -104,7 +104,7 @@ jobs:
             ls -l ${s}
           done
           echo ${{ join(fromJSON(steps.build-rhel-8.outputs.built_rpm_array), ' ') }}
-          echo ${{ join(fromJSON(steps.build-rhel-8.outputs.built_rpm_array), '
+          echo ${{ join(fromJSON(steps.build-rhel-8.outputs.built_srpm_array), '
           ')}}
 
       - name: Release
