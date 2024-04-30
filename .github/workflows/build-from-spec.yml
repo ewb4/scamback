@@ -21,13 +21,11 @@ on:
         default: "Josa"
         type: string
 
-## Comment out the permissions to see if it is needed and then determine where
-# permissions:
-#   contents: read
-
 jobs:
   build:
     name: Build RPM
+    permissions:
+      contents: write
     runs-on: ubuntu-latest 
     steps:
       - name: Checkout
