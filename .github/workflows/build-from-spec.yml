@@ -99,13 +99,14 @@ jobs:
           for r in $(echo '${{ steps.build-rhel-8.outputs.built_rpm_array }}' | jq -r .[]) ; do
             ls -l ${r}
           done
-          for s in $(echo '${{ steps.build-rhel-8.outputs.built_srpm_array }}' | jq -r .[]) ; do
+          #for s in $(echo '${{ steps.build-rhel-8.outputs.built_srpm_array }}' | jq -r .[]) ; do
+          for s in ${{ join(fromJSON(steps.build-rhel-8.outputs.built_srpm_array), ' ') }} ; do
             ls -l ${s}
           done
           echo "Did we get the right arrays back after changing the correct line?"
           echo ${{ join(fromJSON(steps.build-rhel-8.outputs.built_rpm_array), ' ') }}
           echo ${{ join(fromJSON(steps.build-rhel-8.outputs.built_srpm_array), '
-          ')}}
+          ') }}
           echo "# List output directory"
           ls -lR output
           echo "##"
