@@ -13,8 +13,28 @@ on:
         default: 'contrib/rhel/7/SPECS/*.spec'
         type: string
       additional_repos:
-        description: "List of additional repos"
+        description: "List of additional repos as JSON array"
         type: string
+      output_dl_artifacts:
+        description: "Add any downloaded artifacts to artifact_array"
+        required: true
+        default: false
+        type: boolean
+      verbose:
+        description: "Mark verbose option for commands run inside action"
+        required: true
+        default: false
+        type: boolean
+      rpm_debug_package:
+        description: "Produce debug_package RPMs"
+        required: true
+        default: true
+        type: boolean
+      rpm_debugsource_template:
+        description: "Produce _debugsource_template RPMs"
+        required: true
+        default: true
+        type: boolean
       who-to-greet:
         description: "Name to greet"
         required: true
@@ -89,7 +109,11 @@ jobs:
         with:
           spec_file: ${{ steps.set_step.outputs.spec_file }}
           additional_repos: ${{ steps.set_repo.outputs.additional_repos }}
-          who-to-greet: ${{ inputs.who-to-greet }}
+          output_dl_artifacts: false
+          verbose: true
+          rpm_debug_package: false
+          rpm_debugsource_template: false
+          #who-to-greet: ${{ inputs.who-to-greet }}
 
       - name: Echo
         run: |
@@ -125,7 +149,7 @@ jobs:
         with:
           name: scamback-1.5.1-1
           draft: true
-          body_path: output/ReleaseDescription.md
+          #body_path: output/ReleaseDescription.md
           files: |-
             ${{ join(fromJSON(steps.build-rhel-8.outputs.built_rpm_array), '
             ')}}
