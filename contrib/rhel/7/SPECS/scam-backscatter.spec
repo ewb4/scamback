@@ -31,8 +31,6 @@ Scam-backscatter prevents backscatter (accept and bounce) on mail servers
 which don't host mailboxes locally. It validates mailboxes by verifying
 the recipient addresses hosted on a different mail server.
 
-%global _debugsource_template %{nil}
-
 %prep
 
 %setup -q -n %{name}
