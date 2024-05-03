@@ -113,7 +113,7 @@ jobs:
           verbose: true
           rpm_debug_package: false
           rpm_debugsource_template: false
-          #who-to-greet: ${{ inputs.who-to-greet }}
+          who_to_greet: ${{ inputs.who_to_greet }}
 
       - name: Echo
         run: |
