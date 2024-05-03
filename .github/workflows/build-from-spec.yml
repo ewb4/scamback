@@ -35,7 +35,7 @@ on:
         required: true
         default: true
         type: boolean
-      who-to-greet:
+      who_to_greet:
         description: "Name to greet"
         required: true
         default: "Josa"
