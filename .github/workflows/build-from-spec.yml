@@ -111,8 +111,8 @@ jobs:
           additional_repos: ${{ steps.set_repo.outputs.additional_repos }}
           output_dl_artifacts: false
           verbose: true
-          rpm_debug_package: false
-          rpm_debugsource_template: false
+          rpm_debug_package: true
+          rpm_debugsource_template: true
           # https://docs.github.com/en/actions/learn-github-actions/expressions#example
           who_to_greet: ${{ github.event_name == 'workflow_dispatch' && inputs.who_to_greet || format('One called {0}', github.event_name) }}
 
