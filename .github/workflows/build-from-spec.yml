@@ -79,14 +79,18 @@ jobs:
           fi
       - name: List
         run: |
-          echo "# Environment"
+          echo "::group::List env vars"
           env | sort
-          echo 
+          echo "::endgroup::"
+          echo "::group::Announce SPEC filename"
           echo "Deploying build ${{ steps.set_step.outputs.spec_file }}"
-          echo
-          echo "# working directory (pwd)"
+          echo "::endgroup::"
+          echo "::group::working directory (pwd)"
           pwd
+          echo "::endgroup::"
+          echo "::group::Recursive list files from working directory"
           ls -lR
+          echo "::endgroup::"
       - name: Validate
         id: validate
         run: |
