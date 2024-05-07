@@ -95,7 +95,7 @@ jobs:
           echo
           echo "# working directory (pwd)"
           pwd
-          echo
+          echo ""
           echo "# listing all files"
           ls -lR
           echo ""
