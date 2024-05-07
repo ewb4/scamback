@@ -114,7 +114,7 @@ jobs:
           rpm_debug_package: true
           rpm_debugsource_template: false
           # https://docs.github.com/en/actions/learn-github-actions/expressions#example
-          who_to_greet: ${{ github.event_name == 'workflow_dispatch' && inputs.who_to_greet || format('{{One called {0}}', github.event_name) }}
+          who_to_greet: ${{ github.event_name == 'workflow_dispatch' && inputs.who_to_greet || format('One called {0}', github.event_name) }}
 
       - name: Echo
         run: |
