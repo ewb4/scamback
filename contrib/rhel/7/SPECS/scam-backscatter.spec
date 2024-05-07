@@ -39,7 +39,7 @@ cp -pf Makefile.linux Makefile
 cp -pf scam.conf scam.conf.example
 
 %build
-CCFLAGS="-DUSEMAILERTABLE" make
+CCFLAGS="-DUSEMAILERTABLE -g" make
 
 %install
 install -D -p -m 755 scam-back $RPM_BUILD_ROOT%{_bindir}/scam-back
