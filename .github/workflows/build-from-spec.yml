@@ -102,7 +102,7 @@ jobs:
         run: |
           echo "::group::Environment"
           env | sort
-          echo"::endgroup::"
+          echo "::endgroup::"
           echo "::group::working directory (pwd)"
           pwd
           echo "::endgroup::"
