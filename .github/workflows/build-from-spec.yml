@@ -60,10 +60,14 @@ jobs:
             if [[ -n "${{ inputs.spec_file }}" ]]; then
               echo "spec_file=${{ inputs.spec_file }}" | tee -a "$GITHUB_OUTPUT"
             else
-              SPEC_FILE=$(find . -name "*.spec" | head -1 | sed 's#./##')
+            # do more here to better determine the spec file if there are...
+            ## multiple directories in standard structure
+            ## one spec file (even if not matching the build environment dist version)  
+            SPEC_FILE=$(find . -name "*.spec" | head -1 | sed 's#./##')
               echo "spec_file=${SPEC_FILE}" | tee -a "$GITHUB_OUTPUT"
             fi
           fi
+
       - name: set additional repo
         id: set_repo
         run: |
@@ -77,6 +81,7 @@ jobs:
           else
             echo "additional_repos=${{ inputs.additional_repos }}" | tee -a "$GITHUB_OUTPUT"
           fi
+
       - name: List
         run: |
           echo "::group::List env vars"
@@ -91,18 +96,19 @@ jobs:
           echo "::group::Recursive list files from working directory"
           ls -lR
           echo "::endgroup::"
+
       - name: Validate
         id: validate
         run: |
-          echo "# Environment"
+          echo "::group::Environment"
           env | sort
-          echo
-          echo "# working directory (pwd)"
+          echo"::endgroup::"
+          echo "::group::working directory (pwd)"
           pwd
-          echo ""
-          echo "# listing all files"
+          echo "::endgroup::"
+          echo "::group::listing all files"
           ls -lR
-          echo ""
+          echo "::endgroup::"
 
       # Change @main to a specific commit SHA or version tag, e.g.:
       # actions/hello-world-docker-action@e76147da8e5c81eaf017dede5645551d4b94427b
@@ -122,6 +128,7 @@ jobs:
 
       - name: Echo
         run: |
+          echo "::group::Gazintas from build-rhel-8"
           echo "Content-type: ${{ steps.build-rhel-8.outputs.rpm_content_type }}"
           echo "RPM(s): '${{ steps.build-rhel-8.outputs.built_rpm_array }}'"
           echo "SRPM: '${{ steps.build-rhel-8.outputs.built_srpm_array }}'"
@@ -136,9 +143,10 @@ jobs:
           echo ${{ join(fromJSON(steps.build-rhel-8.outputs.built_rpm_array), ' ') }}
           echo ${{ join(fromJSON(steps.build-rhel-8.outputs.built_srpm_array), '
           ') }}
-          echo "# List output directory"
+          echo "::endgroup::"
+          echo "::group::List output directory"
           ls -lR output
-          echo "##"
+          echo "::endgroup::"
           #echo "| **Label**  | **Value**                                                        |"  > output/ReleaseDescription.md
           #echo "|------------|------------------------------------------------------------------|" >> output/ReleaseDescription.md
           #echo "| Name:      | scamback-1.5.1.tgz                                               |" >> output/ReleaseDescription.md
@@ -146,7 +154,6 @@ jobs:
           #echo "| TimeStamp: | Feb 21 02:30:08 2010                                             |" >> output/ReleaseDescription.md
           #echo "| MD5:       | 63165c21ba6bde4bc0532f4af67c3e09                                 |" >> output/ReleaseDescription.md
           #echo "| SHA256:    | db5b650f92f51cfddf1e2e172791396f01375fefd0456eaee910f0645bae6738 |" >> output/ReleaseDescription.md
-          ls -l output
 
       - name: Release
         if: true
