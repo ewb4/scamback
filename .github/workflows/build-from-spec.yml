@@ -145,9 +145,9 @@ jobs:
           echo ${{ join(fromJSON(steps.build-rhel-8.outputs.built_srpm_array), '
           ') }}
           echo "::endgroup::"
-          echo "::group::Artifact Array"
-          echo "'${{ steps.build-rhel-8.outputs.artifact_array }}'" | jq .
-          echo "::endgroup::"
+          #echo "::group::Artifact Array"
+          #echo "'${{ steps.build-rhel-8.outputs.artifact_array }}'" | jq .
+          #echo "::endgroup::"
           echo "::group::List output directory"
           ls -lR output
           echo "::endgroup::"
