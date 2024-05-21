@@ -38,7 +38,7 @@ on:
       who_to_greet:
         description: "Name to greet"
         required: true
-        default: "Rose"
+        default: "Jose"
         type: string
 
 jobs:
@@ -132,6 +132,7 @@ jobs:
           echo "Content-type: ${{ steps.build-rhel-8.outputs.rpm_content_type }}"
           echo "RPM(s): '${{ steps.build-rhel-8.outputs.built_rpm_array }}'"
           echo "SRPM: '${{ steps.build-rhel-8.outputs.built_srpm_array }}'"
+          echo "output_array: '${{ steps.build-rhel-8.outputs.output_array }}'"
           for r in $(echo '${{ steps.build-rhel-8.outputs.built_rpm_array }}' | jq -r .[]) ; do
             ls -l ${r}
           done
