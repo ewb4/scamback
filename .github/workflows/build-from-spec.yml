@@ -38,7 +38,7 @@ on:
       who_to_greet:
         description: "Name to greet"
         required: true
-        default: "Rose"
+        default: "Jose"
         type: string
 
 jobs:
