@@ -152,7 +152,7 @@ jobs:
           echo "::group::List output directory"
           ls -laR output
           echo "::endgroup::"
-          NVR=$(echo '${{ steps.build-rhel-8.outputs.built_rpm_array }}' | jq -r '.[] | .NVR')
+          NVR=$(echo '${{ steps.build-rhel-8.outputs.artifact_array }}' | jq -r '.[] | .NVR')
           echo "NVR=${NVR}" | tee -a "$GITHUB_OUTPUT"
           printf "%s\n" "${NVR}"                                > output/ReleaseDescription.md
           fstr='| %-20s | %-64s |\n'
