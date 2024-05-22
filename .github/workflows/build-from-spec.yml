@@ -164,6 +164,8 @@ jobs:
             cat ${f} | jq .
             rm -v ${f}
           done
+          touch ${f}
+          ls -l ${f}
           echo "::endgroup::"
 
       - name: Release
