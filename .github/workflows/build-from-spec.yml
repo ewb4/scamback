@@ -127,6 +127,7 @@ jobs:
           who_to_greet: ${{ github.event_name == 'workflow_dispatch' && inputs.who_to_greet || format('One called {0}', github.event_name) }}
 
       - name: Echo
+        id: echoer
         run: |
           echo "::group::Gazintas from build-rhel-8"
           echo "Content-type: ${{ steps.build-rhel-8.outputs.rpm_content_type }}"
@@ -151,8 +152,11 @@ jobs:
           echo "::group::List output directory"
           ls -laR output
           echo "::endgroup::"
+          NVR=$(echo '${{ steps.build-rhel-8.outputs.built_rpm_array }}' | jq -r .[] | .NVR)
+          echo "NVR=${NVR}" | tee -a "$GITHUB_OUTPUT"
+          printf "%s\n" "${NVR}"                                > output/ReleaseDescription.md
           fstr='| %-20s | %-64s |\n'
-          printf "| %-20s | %-64s |\n" "**Label**" "**Value**"  > output/ReleaseDescription.md
+          printf "| %-20s | %-64s |\n" "**Label**" "**Value**" >> output/ReleaseDescription.md
           printf "${fstr}" "-" "-" | tr ' ' '-'                >> output/ReleaseDescription.md
           #echo "| **Label**  | **Value**                                                        |"  > output/ReleaseDescription.md
           #echo "|------------|------------------------------------------------------------------|" >> output/ReleaseDescription.md
@@ -173,9 +177,9 @@ jobs:
         if: true
         uses: softprops/action-gh-release@v2
         with:
-          name: ${{ steps.build-rhel-8.outputs.artifact_array[].NVR }}
+          name: ${{ steps.echoer.outputs.echoer.NVR }}
           draft: true
-          #body_path: output/ReleaseDescription.md
+          body_path: output/ReleaseDescription.md
           files: |-
             ${{ join(fromJSON(steps.build-rhel-8.outputs.built_rpm_array), '
             ')}}
