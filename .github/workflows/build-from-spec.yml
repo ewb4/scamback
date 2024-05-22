@@ -151,6 +151,9 @@ jobs:
           echo "::group::List output directory"
           ls -laR output
           echo "::endgroup::"
+          fstr='| %-20s | %-64s |\n'
+          printf "| %-20s | %-64s |\n" "**Label**" "**Value**"  > output/ReleaseDescription.md
+          printf "${fstr}" "-" "-" | tr ' ' '-'                >> output/ReleaseDescription.md
           #echo "| **Label**  | **Value**                                                        |"  > output/ReleaseDescription.md
           #echo "|------------|------------------------------------------------------------------|" >> output/ReleaseDescription.md
           #echo "| Name:      | scamback-1.5.1.tgz                                               |" >> output/ReleaseDescription.md
@@ -170,7 +173,7 @@ jobs:
         if: true
         uses: softprops/action-gh-release@v2
         with:
-          name: scamback-1.5.1-1
+          name: ${{ steps.build-rhel-8.outputs.artifact_array[].NVR }}
           draft: true
           #body_path: output/ReleaseDescription.md
           files: |-
