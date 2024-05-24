@@ -119,7 +119,7 @@ jobs:
         with:
           spec_file: ${{ steps.set_step.outputs.spec_file }}
           additional_repos: ${{ steps.set_repo.outputs.additional_repos }}
-          output_dl_artifacts: true
+          output_dl_artifacts: false
           verbose: true
           rpm_debug_package: false
           rpm_debugsource_template: true
