@@ -258,5 +258,5 @@ jobs:
             ')}}
             ${{ join(fromJSON(steps.build-rhel-8.outputs.built_srpm_array), '
             ')}}
-            ${{ steps.echoer.outputs.srcincluded == true && join(fromJSON(steps.echoer.outputs.src_array), '
+            ${{ join(fromJSON(steps.echoer.outputs.src_array), '
             ')}}
