@@ -38,7 +38,7 @@ on:
       who_to_greet:
         description: "Name to greet"
         required: true
-        default: "Rose"
+        default: "Jose"
         type: string
 
 jobs:
@@ -238,12 +238,7 @@ jobs:
           printf "\`\`\`\n"                                              >> output/ReleaseDescription.md
           echo "::group::List output JSON file contents"
           ls -lh output/ReleaseDescription.md
-          cat output/ReleaseDescription.md
-          for f in $(ls -1 output/full_artifact_array.*.json 2>/dev/null) ; do
-            ls -l ${f}
-            cat ${f} | jq .
-            rm -v ${f}
-          done
+          cat output/ReleaseDescription.md | nl -ba
           echo "::endgroup::"
 
       - name: Release
