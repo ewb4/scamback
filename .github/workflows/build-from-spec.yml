@@ -179,7 +179,7 @@ jobs:
             done                                                         >> output/ReleaseDescription.md
             # get the debugs
             ## find a way to check to see if debugsource and debuginfo packages were even asked for
-            count=$(cat ${TMPFILE} | jq -c '.Artifacts[] | select(.Type == "x86_64") | select(.Name | test("-debugsource-|-debuginfo-")) | length')
+            count=$(cat ${TMPFILE} | jq -c '[].Artifacts[] | select(.Type == "x86_64") | select(.Name | test("-debugsource-|-debuginfo-")) | length] | add')
             if [ ${count} -gt 0 ] ; then
               printf "<details>\n\n"                                     >> output/ReleaseDescription.md
               printf "<summary>Debuginfo and Debugsource</summary>\n\n"  >> output/ReleaseDescription.md
