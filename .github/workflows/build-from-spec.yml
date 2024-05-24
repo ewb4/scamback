@@ -181,7 +181,7 @@ jobs:
             ## find a way to check to see if debugsource and debuginfo packages were even asked for
             printf "<details>\n\n"                                       >> output/ReleaseDescription.md
             printf "<summary>Debuginfo and Debugsource</summary>\n\n"    >> output/ReleaseDescription.md
-            for f in $(cat ${TMPFILE} | jq -c '.Artifacts[] | select(.Type == "x86_64") | select(.Name | test("-debugsource-|-debuginfo-") | not)') ; do
+            for f in $(cat ${TMPFILE} | jq -c '.Artifacts[] | select(.Type == "x86_64") | select(.Name | test("-debugsource-|-debuginfo-"))') ; do
               #each line is a JSON artifact block
               eval "$(echo "${f}" | jq -r '@sh "Name=\(.Name) Size=\(.Size) MD5=\(.MD5) SHA256=\(.SHA256) sse=\(.ModifiedSSE)"')"
               tstamp=$(TZ=UTC date --date="@${sse}")
