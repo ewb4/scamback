@@ -164,7 +164,7 @@ jobs:
             # get the RPMs
             printf "<details>\n\n"                                     >> output/ReleaseDescription.md
             printf "<summary>RPMs</summary>\n\n"                       >> output/ReleaseDescription.md
-            for f in $(cat ${TMPFILE} | jq -c '.[] | .Artifacts[] | select(.Type == "x86_64") | select(.Name | test("-debugsource-|-debuginfo-") | not)') ; do
+            for f in $(cat ${TMPFILE} | jq -c '.Artifacts[] | select(.Type == "x86_64") | select(.Name | test("-debugsource-|-debuginfo-") | not)') ; do
               #each line is a JSON artifact block
               eval "$(echo "${f}" | jq -r '@sh "Name=\(.Name) Size=\(.Size) MD5=\(.MD5) SHA256=\(.SHA256) sse=\(.ModifiedSSE)"')"
               tstamp=$(TZ=UTC date --date="@${sse}")
@@ -180,7 +180,7 @@ jobs:
             # get the debugs
             printf "<details>\n\n"                                     >> output/ReleaseDescription.md
             printf "<summary>Debuginfo and Debugsource</summary>\n\n"  >> output/ReleaseDescription.md
-            for f in $(cat ${TMPFILE} | jq -c '.[] | .Artifacts[] | select(.Type == "x86_64") | select(.Name | test("-debugsource-|-debuginfo-") | not)') ; do
+            for f in $(cat ${TMPFILE} | jq -c '.Artifacts[] | select(.Type == "x86_64") | select(.Name | test("-debugsource-|-debuginfo-") | not)') ; do
               #each line is a JSON artifact block
               eval "$(echo "${f}" | jq -r '@sh "Name=\(.Name) Size=\(.Size) MD5=\(.MD5) SHA256=\(.SHA256) sse=\(.ModifiedSSE)"')"
               tstamp=$(TZ=UTC date --date="@${sse}")
@@ -198,7 +198,7 @@ jobs:
             # get the SRPMs
             printf "<details>\n\n"                                     >> output/ReleaseDescription.md
             printf "<summary>SRPMs</summary>\n\n"                      >> output/ReleaseDescription.md
-            for f in $(cat ${TMPFILE} | jq -c '.[] | .Artifacts[] | select(.Type == "srpm")') ; do
+            for f in $(cat ${TMPFILE} | jq -c '.Artifacts[] | select(.Type == "srpm")') ; do
               #each line is a JSON artifact block
               eval "$(echo "${f}" | jq -r '@sh "Name=\(.Name) Size=\(.Size) MD5=\(.MD5) SHA256=\(.SHA256) sse=\(.ModifiedSSE)"')"
               tstamp=$(TZ=UTC date --date="@${sse}")
@@ -213,11 +213,11 @@ jobs:
             done
             printf "</details>\n\n"                                    >> output/ReleaseDescription.md
             # get the downloaded files if there are any
-            count=$(cat ${TMPFILE} | jq -c '.[] | .Artifacts[] | select(.Type == "dlsrc") | length')
+            count=$(cat ${TMPFILE} | jq -c '.Artifacts[] | select(.Type == "dlsrc") | length')
             if [ ${count} -gt 0 ] ; then
               printf "<details>\n\n"                                   >> output/ReleaseDescription.md
               printf "<summary>Downloaded source files</summary>\n\n" >> output/ReleaseDescription.md
-              for f in $(cat ${TMPFILE} | jq -c '.[] | .Artifacts[] | select(.Type == "dlsrc")') ; do
+              for f in $(cat ${TMPFILE} | jq -c '.Artifacts[] | select(.Type == "dlsrc")') ; do
                 #each line is a JSON artifact block
                 eval "$(echo "${f}" | jq -r '@sh "Name=\(.Name) Size=\(.Size) MD5=\(.MD5) SHA256=\(.SHA256) sse=\(.ModifiedSSE)"')"
                 tstamp=$(TZ=UTC date --date="@${sse}")
