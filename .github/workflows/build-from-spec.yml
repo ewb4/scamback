@@ -218,7 +218,7 @@ jobs:
             # this is not going to work when consolidating multiple distributions  
             echo "srcincluded=true" >> "$GITHUB_OUTPUT" 
               src_array=$(echo '${{ steps.build-rhel-8.outputs.artifact_array }}' | jq -c '[.[] | .artifactsets[] | .Artifacts[] | select(.Type =="dlsrc") | .FullPath] | unique')
-              echo "src_array=${src_array}" >> "$GITHUB_OUTPUT" 
+              echo "src_array=${src_array}" | tee -a "$GITHUB_OUTPUT" 
               printf "<details>\n\n"                                     >> output/ReleaseDescription.md
               printf "<summary>Downloaded source files</summary>\n\n"    >> output/ReleaseDescription.md
               for f in $(cat ${TMPFILE} | jq -c '.Artifacts[] | select(.Type == "dlsrc")') ; do
@@ -258,5 +258,5 @@ jobs:
             ')}}
             ${{ join(fromJSON(steps.build-rhel-8.outputs.built_srpm_array), '
             ')}}
-            ${{ steps.echoer.outputs.srcincluded == true && join(fromJSON(steps.echoer.outputs.src_array), '
+            ${{ steps.echoer.outputs.srcincluded == "true" && join(fromJSON(steps.echoer.outputs.src_array), '
             ')}}
