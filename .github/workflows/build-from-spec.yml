@@ -233,11 +233,12 @@ jobs:
               printf "</details>\n\n"                                    >> output/ReleaseDescription.md
             fi
           done
-          printf "```json\n"                                             >> output/ReleaseDescription.md
+          printf "\`\`\`json\n"                                          >> output/ReleaseDescription.md
           echo '${{ steps.build-rhel-8.outputs.artifact_array }}' | jq . >> output/ReleaseDescription.md
-          printf "```\n"                                                 >> output/ReleaseDescription.md
+          printf "\`\`\`\n"                                              >> output/ReleaseDescription.md
           echo "::group::List output JSON file contents"
           ls -lh output/ReleaseDescription.md
+          cat output/ReleaseDescription.md
           for f in $(ls -1 output/full_artifact_array.*.json 2>/dev/null) ; do
             ls -l ${f}
             cat ${f} | jq .
