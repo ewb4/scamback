@@ -158,10 +158,9 @@ jobs:
           TMPFILE=$(mktemp -q /tmp/.artifact-json-by-dist.XXXXXX)
           #create list of all distributions from JSON
           dists=$(echo '${{ steps.build-rhel-8.outputs.artifact_array }}' | jq -r '.[] | .artifactsets[] | .Dist')
-          echo ${dists}
           for dist in ${dists} ; do
             printf "<summary>%s</summary>\n\n" "${dist}"               >> output/ReleaseDescription.md
-            echo '${{ steps.build-rhel-8.outputs.artifact_array }}' | jq --arg d "${dist}" '.[] | .artifactsets[] | select(.Dist == $d)' > ${TMPFILE}
+            echo '${{ steps.build-rhel-8.outputs.artifact_array }}' | jq --arg d "${dist}" '.[] | .artifactsets[] | select(.Dist == $d)' | tee ${TMPFILE}
             # get the RPMs
             printf "<details>\n\n"                                     >> output/ReleaseDescription.md
             printf "<summary>RPMs</summary>\n\n"                       >> output/ReleaseDescription.md
