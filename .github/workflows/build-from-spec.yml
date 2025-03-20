@@ -4,7 +4,7 @@ on:
   push:
   
   # Allows you to run this workflow manually from the Actions tab
-  ## but it only appears to be a valid option when the workflow is on the main/master brance
+  ## but it only appears to be a valid option when the workflow is on the main/master branch
   workflow_dispatch:
     inputs:
       spec_file:
