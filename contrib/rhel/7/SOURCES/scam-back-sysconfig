@@ -9,8 +9,8 @@ SPOOLDIR="/var/spool/scamback"
 ## not or not always expanded when this file is the EnvironmentFile
 ## in SystemD.
 # The socket used by scam-back to communicate with sendmail
-#SOCKET="$TMPFILESDIR/scam-back.sock"
-SOCKET="/run/scam-back/scam-back.sock"
+#SOCKET="unix:$TMPFILESDIR/scam-back.sock"
+SOCKET="unix:/run/scam-back/scam-back.sock"
 
 # Run scam-back as this user, not root.  RECOMMENDED
 SCAMBACK_USER="scamback"
