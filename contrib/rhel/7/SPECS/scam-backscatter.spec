@@ -54,6 +54,9 @@ install -D -p -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_unitdir}/scam-back.service
 ##install -D -p -m 755 %{SOURCE6} $RPM_BUILD_ROOT%{_libexecdir}/%{name}-wrapper
 install -D -p -m 755 %{SOURCE6} $RPM_BUILD_ROOT%{_libexecdir}/scam-back-wrapper
 
+# Create directory for unix socket
+mkdir -p -v $RPM_BUILD_ROOT%{_var}/spool/scamback
+
 %pre
 getent group smmsp > /dev/null || %{_sbindir}/groupadd -r smmsp
 getent passwd scamback > /dev/null || %{_sbindir}/useradd -r -g smmsp -d %{_localstatedir}/spool/scamback -s /sbin/nologin -c "scam-backscatter User" scamback
@@ -87,6 +90,7 @@ exit 0
 %config(noreplace) %{_sysconfdir}/sysconfig/scam-back
 ##%{_unitdir}/%{name}.service
 %{_unitdir}/scam-back.service
+%attr(0755,scamback,smmsp) %dir %{_var}/spool/scamback
 
 %changelog
 * Thu Jul 28 2022 E. Wes Brown <EWBr0wn on GitHub.com> 1.5.1-1
