@@ -12,6 +12,7 @@ Source4:        scam-back-moredocs.tar.gz
 Source5:        milterconfig.html
 Source6:        scam-back-wrapper
 Patch0:         rc.scamback.1.3.patch
+Patch1:         patch-scam.conf
 BuildRequires:  gcc
 BuildRequires:  make
 %if 0%{?fedora} || 0%{?rhel} > 7
@@ -35,6 +36,7 @@ the recipient addresses hosted on a different mail server.
 
 %setup -q -n %{name}
 %setup -q -n %{name} -a 4
+%patch 1
 cp -pf Makefile.linux Makefile
 cp -pf scam.conf scam.conf.example
 
