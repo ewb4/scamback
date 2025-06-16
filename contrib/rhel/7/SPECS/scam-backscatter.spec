@@ -12,7 +12,6 @@ Source4:        scam-back-moredocs.tar.gz
 Source5:        milterconfig.html
 Source6:        scam-back-wrapper
 Source7:        rc.d-rc.scamback
-Patch0:         rc.scamback.1.3.patch
 Patch1:         patch-scam.conf
 BuildRequires:  gcc
 BuildRequires:  make
