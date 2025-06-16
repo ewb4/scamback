@@ -11,6 +11,7 @@ Source3:        scam-back-sysconfig
 Source4:        scam-back-moredocs.tar.gz
 Source5:        milterconfig.html
 Source6:        scam-back-wrapper
+Source7:        rc.d-rc.scamback
 Patch0:         rc.scamback.1.3.patch
 Patch1:         patch-scam.conf
 BuildRequires:  gcc
@@ -33,12 +34,18 @@ which don't host mailboxes locally. It validates mailboxes by verifying
 the recipient addresses hosted on a different mail server.
 
 %prep
-
-%setup -q -n %{name}
-%setup -q -n %{name} -a 4
-%patch 1
-cp -pf Makefile.linux Makefile
+# Steps to get ready for the build
+%setup    -n %{name}
+%setup    -n %{name} -a 4
+%setup    -n %{name} -a 7
+mv -v %{SOURCE7} rc.scamback
+# apply rc patch
+%patch -P 0 -p2
+# apply scam.conf patch
+%patch1
 cp -pf scam.conf scam.conf.example
+# setup the correct Makefile for this build
+cp -pf Makefile.linux Makefile
 
 %build
 CCFLAGS="-DUSEMAILERTABLE -g" make

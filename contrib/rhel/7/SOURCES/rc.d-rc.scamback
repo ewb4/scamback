@@ -1,0 +1,117 @@
+#!/bin/sh
+# Start/stop/restart scamback.
+
+# Start scam-back:
+scamback_start() {
+  # Check for dead socket existence
+  if [ -e /var/spool/scamback/scam-back.sock ] ; then
+    # check to see if scam-back is already running
+    # Socket exists
+    if [ -f /var/spool/scamback/scam-back.pid ] ; then
+      # set pid to look for
+      pid=`cat /var/spool/scamback/scam-back.pid`
+    else
+      # check process table for scam-back
+      pid=`ps auxw | grep -v grep | grep scam-back | grep '^scamback' | awk '{print $2}'`
+    fi
+    if [ "X${pid}" = "X" ] ; then
+      # pid does not seem to be set
+      # we can blow away socket safely
+      rm -f /var/spool/scamback/scam-back.sock
+    fi
+    test=`ps auxw | grep -v grep | grep "${pid} " | grep scam-back | grep -c '^scamback'`
+    # if test greater than 1, then scam-back likely running
+    if [ ${test} -eq 0 ] ; then
+      # we can blow away socket safely
+      rm -f /var/spool/scamback/scam-back.sock
+    fi
+  fi
+  if [ -x /usr/local/sbin/scam-back ]; then
+    echo "Starting scam backscatter daemon:  /usr/local/sbin/scam-back"
+    /usr/local/sbin/scam-back -p unix:/var/spool/scamback/scam-back.sock \
+      -u scamback -b /var/spool/scamback/backscatter.txt -D
+  fi
+  # need to have the socket exist before we leave this routine
+  # otherwise things will not start properly in sendmail
+  #
+  # Give it 5 seconds with a try every second to see if the socket exists
+  count=5
+  while [ ${count} -gt 0 ] ; do
+    if [ -S /var/spool/scamback/scam-back.sock ] ; then
+      count=0
+    else
+      count=`expr ${count} - 1`
+    fi
+  done
+}
+
+# Stop scam-back:
+scamback_stop() {
+  if [ ! -f /var/spool/scamback/scam-back.pid ] ; then
+    killall scam-back
+  else
+    # the pid file may be there but the process may be dead
+    kill `cat /var/spool/scamback/scam-back.pid`
+  fi
+}
+
+# Status scam-back:
+scamback_status() {
+  pspid=`ps auxw | grep -v grep | grep scam-back | grep '^scamback' | awk '{print $2}'`
+  if [ ! -f /var/spool/scamback/scam-back.pid ] ; then
+    if [ "X${pspid}" != "X" ] ; then
+      # pid file seems to be missing but process is running
+      echo "scamback: pid file missing, but process running... placing [${pspid}] into pid file."
+      echo "${pspid}" > /var/spool/scamback/scam-back.pid
+    else
+      if [ -S /var/spool/scamback/scam-back.sock ] ; then
+        # we can blow away socket safely
+        echo "scamback: blowing away scam-back.sock"
+        rm -f /var/spool/scamback/scam-back.sock
+      fi
+      echo "scamback: scamback is not running."
+    fi
+  else
+    if [ -f /var/spool/scamback/scam-back.pid ] ; then
+      # the pid file may be there but the process may be dead
+      if [ "X${pspid}" = "X" ] ; then
+        # pid file seems to there but process is missing
+        echo "scamback: pid file exists, but process is missing... removing pid file."
+        rm -f /var/spool/scamback/scam-back.pid
+        if [ -S /var/spool/scamback/scam-back.sock ] ; then
+          # we can blow away socket safely
+          echo "scamback: blowing away scam-back.sock"
+          rm -f /var/spool/scamback/scam-back.sock
+        fi
+      else
+        echo "scamback: scamback is running [${pspid}]."
+      fi
+    else
+      echo "scamback: scamback is running [${pspid}]."
+    fi
+  fi
+}
+
+# Restart scam-back:
+scamback_restart() {
+  scamback_stop
+  sleep 1
+  scamback_start
+}
+
+case "$1" in
+'start')
+  scamback_start
+  ;;
+'stop')
+  scamback_stop
+  ;;
+'status')
+  scamback_status
+  ;;
+'restart')
+  scamback_restart
+  ;;
+*)
+  echo "usage $0 start|stop|status|restart"
+esac
