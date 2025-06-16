@@ -35,11 +35,8 @@ the recipient addresses hosted on a different mail server.
 
 %prep
 # Steps to get ready for the build
-%setup    -n %{name}
-%setup    -T -D -n %{name} -a 4
-mv -v %{SOURCE7} rc.scamback
-# apply rc patch
-%patch -P 0 -p2
+%setup -q -n %{name}
+%setup -q -T -D -n %{name} -a 4
 # apply scam.conf patch
 %patch1
 cp -pf scam.conf scam.conf.example

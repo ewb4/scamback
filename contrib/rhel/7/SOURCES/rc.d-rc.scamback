@@ -1,6 +1,7 @@
 #!/bin/sh
 # Start/stop/restart scamback.
 
+RETVAL=0
 # Start scam-back:
 scamback_start() {
   # Check for dead socket existence
@@ -57,6 +58,36 @@ scamback_stop() {
 
 # Status scam-back:
 scamback_status() {
+  retcode=0
+  # Check for dead socket existence
+  if [ -S /var/spool/scamback/scam-back.sock ] ; then
+    # check to see if scam-back is already running
+    # Socket exists
+    spid=$(fuser /var/spool/scamback/scam-back.sock 2>/dev/null | tr -d ' ')
+    if [ -f /var/spool/scamback/scam-back.pid ] ; then
+      # set pid to look for
+      pid=`cat /var/spool/scamback/scam-back.pid`
+    else
+      # check process table for scam-back
+      pid=`ps auxw | grep -v grep | grep scam-back | grep '^scamback' | awk '{print $2}'`
+    fi
+    if [ "X${pid}" = "X" -o "X${spid}" = "X" ] ; then
+      # pid does not seem to be set
+      # and socket is not open with a pid
+      # we can blow away socket safely
+      rm -f /var/spool/scamback/scam-back.sock
+      echo "scamback: scamback is not running."
+      retcode=1
+    fi
+    test=`ps auxw | grep -v grep | grep "${pid} " | grep scam-back | grep -c '^scamback'`
+    # if test greater than 1, then scam-back likely running
+    if [ ${test} -eq 0 ] ; then
+      # we can blow away socket safely
+      rm -f /var/spool/scamback/scam-back.sock
+      echo "scamback: scamback is not running."
+      retcode=1
+    fi
+  fi
   pspid=`ps auxw | grep -v grep | grep scam-back | grep '^scamback' | awk '{print $2}'`
   if [ ! -f /var/spool/scamback/scam-back.pid ] ; then
     if [ "X${pspid}" != "X" ] ; then
@@ -70,6 +101,7 @@ scamback_status() {
         rm -f /var/spool/scamback/scam-back.sock
       fi
       echo "scamback: scamback is not running."
+      retcode=1
     fi
   else
     if [ -f /var/spool/scamback/scam-back.pid ] ; then
@@ -82,6 +114,7 @@ scamback_status() {
           # we can blow away socket safely
           echo "scamback: blowing away scam-back.sock"
           rm -f /var/spool/scamback/scam-back.sock
+	  retcode=1
         fi
       else
         echo "scamback: scamback is running [${pspid}]."
@@ -90,6 +123,7 @@ scamback_status() {
       echo "scamback: scamback is running [${pspid}]."
     fi
   fi
+  return ${retcode}
 }
 
 # Restart scam-back:
@@ -101,6 +135,7 @@ scamback_restart() {
 
 case "$1" in
 'start')
+  scamback_status
   scamback_start
   ;;
 'stop')
@@ -108,10 +143,15 @@ case "$1" in
   ;;
 'status')
   scamback_status
+  RETVAL=$?
   ;;
 'restart')
   scamback_restart
+  RETVAL=$?
   ;;
 *)
   echo "usage $0 start|stop|status|restart"
+  exit 1
 esac
+
+exit ${RETVAL}
